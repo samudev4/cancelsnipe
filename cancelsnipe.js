@@ -1,9 +1,9 @@
 /*
  * Script Name: Cancel Snipe
- * Version: v1.0
+ * Version: v1.2
  * Last Updated: 09/12/2025
  * Author: samudev
- * Author URL: https://twscripts.dev/
+ * Author URL: https://github.com/samudev4
  * Author Contact: samudevelopment@gmail.com
  * Approved: NO
  */
@@ -11,7 +11,6 @@
 (function(){
     const cancelDelay = 5000;
 
-    // Estilos al estilo TW
     const style = document.createElement("style");
     style.textContent = `
     #backtime-box {
