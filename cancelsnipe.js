@@ -16,7 +16,7 @@
     #backtime-box {
         position: fixed;
         top: 100px;
-        right: 20px;
+        left: 20px;
         width: 300px;
         background: #f4f1e7;
         color: #2b1d0f;
@@ -26,15 +26,30 @@
         box-shadow: 0 0 8px rgba(0,0,0,0.3);
         font-family: Verdana, Geneva, sans-serif;
         z-index: 99999;
+        cursor: default;
+    }
+    #backtime-box .header {
+        position: relative;
+        margin-bottom: 10px;
+        cursor: move;
     }
     #backtime-box h2 {
-        margin: 0 0 10px 0;
+        margin: 0;
         font-size: 14px;
         text-align: center;
         background: #8b6f47;
         color: #fff;
         padding: 4px 0;
         border-radius: 3px;
+    }
+    #backtime-box #close-backtime {
+        position: absolute;
+        top: 2px;
+        right: 4px;
+        cursor: pointer;
+        color: #fff;
+        font-weight: bold;
+        font-size: 12px;
     }
     #backtime-box input {
         width: 100%;
@@ -68,16 +83,16 @@
     #backtime-box .ok { border-left:4px solid #4caf50; }
     #backtime-box .mid { border-left:4px solid #ffeb3b; }
     #backtime-box .bad { border-left:4px solid #f44336; }
-    #backtime-box #close-backtime { float:right; cursor:pointer; color:#8b6f47; font-weight:bold; }
     `;
     document.head.appendChild(style);
 
-    // Crear interfaz
     const box = document.createElement("div");
     box.id = "backtime-box";
     box.innerHTML = `
-        <span id="close-backtime">✖</span>
-        <h2>CANCEL SNIPE</h2>
+        <div class="header">
+            <h2>CANCEL SNIPE</h2>
+            <span id="close-backtime">✖</span>
+        </div>
         <label>1. Hora de llegada de la OFENSIVA enemiga (HH:MM:SS:MMM):</label>
         <input id="ataque_enemigo" type="text" placeholder="16:14:51:492">
         <label>2. Duración del ataque de tus tropas (HH:MM:SS:MMM):</label>
@@ -91,8 +106,8 @@
     document.body.appendChild(box);
 
     // Cerrar panel
-    document.getElementById("close-backtime").onclick = function() {
-        document.getElementById("backtime-box").remove();
+    document.getElementById("close-backtime").onclick = function(){
+        box.remove();
     };
 
     // Funciones de cálculo
@@ -100,7 +115,6 @@
         const [h,m,s,ms] = str.split(":").map(Number);
         return (((h*60+m)*60+s)*1000) + ms;
     }
-
     function msToTime(ms){
         let h = Math.floor(ms/3600000); ms%=3600000;
         let m = Math.floor(ms/60000); ms%=60000;
@@ -133,4 +147,23 @@
             "Regreso exacto: "+msToTime(regresoDeseado)+"\n"+
             "MARGEN frente al ataque enemigo: "+margen+" ms ("+(margen/1000).toFixed(3)+" s)";
     };
+
+    // Hacer draggable
+    function makeDraggable(el, handle) {
+        let isDragging = false, offsetX = 0, offsetY = 0;
+        handle.onmousedown = function(e){
+            isDragging = true;
+            offsetX = e.clientX - el.getBoundingClientRect().left;
+            offsetY = e.clientY - el.getBoundingClientRect().top;
+            document.body.style.userSelect = "none";
+        };
+        document.onmousemove = function(e){
+            if(!isDragging) return;
+            el.style.left = (e.clientX - offsetX) + "px";
+            el.style.top = (e.clientY - offsetY) + "px";
+            el.style.right = "auto";
+        };
+        document.onmouseup = function(){ isDragging=false; document.body.style.userSelect="auto"; };
+    }
+    makeDraggable(box, box.querySelector(".header"));
 })();
