@@ -11,17 +11,18 @@
 (function(){
     const cancelDelay = 5000;
 
+    // Estilos al estilo TW
     const style = document.createElement("style");
     style.textContent = `
     #backtime-box {
         position: fixed;
         top: 100px;
         left: 20px;
-        width: 300px;
-        background: #f4f1e7;
-        color: #2b1d0f;
-        padding: 10px;
-        border: 1px solid #8b6f47;
+        width: 320px;
+        background: #fdf6e3; /* Fondo claro estilo TW */
+        color: #2b1d0f; /* Texto oscuro */
+        padding: 12px;
+        border: 1px solid #c0a070; /* borde suave */
         border-radius: 5px;
         box-shadow: 0 0 8px rgba(0,0,0,0.3);
         font-family: Verdana, Geneva, sans-serif;
@@ -37,9 +38,9 @@
         margin: 0;
         font-size: 14px;
         text-align: center;
-        background: #8b6f47;
+        background: #c0a070; /* header TW */
         color: #fff;
-        padding: 4px 0;
+        padding: 5px 0;
         border-radius: 3px;
     }
     #backtime-box #close-backtime {
@@ -53,31 +54,32 @@
     }
     #backtime-box input {
         width: 100%;
-        padding: 4px;
+        padding: 5px;
         margin-bottom: 8px;
-        border: 1px solid #8b6f47;
+        border: 1px solid #c0a070;
         border-radius: 3px;
         font-size: 12px;
     }
     #backtime-box button {
         width: 100%;
         padding: 6px;
-        background: linear-gradient(#d9c39c, #b79868);
-        border: 1px solid #8b6f47;
+        background: linear-gradient(#ffd700, #c0a070); /* degradado TW */
+        border: 1px solid #c0a070;
         color: #2b1d0f;
         border-radius: 3px;
         font-size: 12px;
         cursor: pointer;
+        text-align: center;
     }
     #backtime-box button:hover {
-        background: linear-gradient(#b79868, #d9c39c);
+        background: linear-gradient(#c0a070, #ffd700);
     }
     #backtime-box .resultado-box {
         margin-top: 8px;
         padding: 8px;
         border-radius: 3px;
         font-size: 12px;
-        background: #e6dfc9;
+        background: #fff8dc; /* resultado TW */
         color: #2b1d0f;
     }
     #backtime-box .ok { border-left:4px solid #4caf50; }
@@ -86,6 +88,7 @@
     `;
     document.head.appendChild(style);
 
+    // Crear interfaz
     const box = document.createElement("div");
     box.id = "backtime-box";
     box.innerHTML = `
@@ -101,7 +104,7 @@
         <input id="hora_regreso" type="text" placeholder="16:14:51:592">
         <button id="calcular">Calcular</button>
         <div id="resultado" class="resultado-box">Introduce datos y pulsa Calcular.</div>
-        <div style="margin-top:4px; font-size:10px; text-align:right; color:#8b6f47;">Hecho por samudev4</div>
+        <div style="margin-top:4px; font-size:10px; text-align:right; color:#c0a070;">Hecho por samudev4</div>
     `;
     document.body.appendChild(box);
 
