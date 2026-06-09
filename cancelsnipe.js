@@ -1,7 +1,7 @@
 /*
  * Script Name: Cancel Snipe
  * Version: v1.2
- * Last Updated: 09/12/2025
+ * Last Updated: 09/06/2026
  * Author: samudev
  * Author URL: https://github.com/samudev4
  * Author Contact: samudevelopment@gmail.com
