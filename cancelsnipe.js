@@ -1,35 +1,18 @@
 /*
- * Script Name: Cancel Snipe Avanzado
- * Version: v1.4
+ * Script Name: Cancel Snipe Avanzado (Quickbar)
+ * Version: v1.6
  * Last Updated: 12/06/2026
- * Author: samudev (Mejoras de Persistencia y Accesos Rápidos)
+ * Author: samudev (Optimizado para Quickbar sin Tampermonkey)
  * Author URL: https://github.com/samudev4
  * Author Contact: samudevelopment@gmail.com
  * Approved: NO
  */
 
 (function(){
-    // Control de apertura/cierre: Si el usuario lo cerró explícitamente, no se auto-ejecuta al cambiar de página
-    const isOpen = localStorage.getItem("tw_snipe_open");
-    
-    // Si es la primera vez que se usa, por defecto estará abierto
-    if (isOpen === "false") {
-        // Creamos un pequeño botón flotante discreto por si quiere volver a abrirlo sin recargar
-        if (!document.getElementById("open-snipe-launcher")) {
-            const launcher = document.createElement("div");
-            launcher.id = "open-snipe-launcher";
-            launcher.innerHTML = "🎯";
-            launcher.setAttribute("style", "position:fixed; bottom:20px; left:20px; background:#8b6f47; color:white; padding:8px 10px; border-radius:50%; cursor:pointer; z-index:99999; box-shadow: 0 2px 5px rgba(0,0,0,0.3); font-size:16px;");
-            launcher.addEventListener("click", function() {
-                localStorage.setItem("tw_snipe_open", "true");
-                location.reload();
-            });
-            document.body.appendChild(launcher);
-        }
-        return; 
-    }
+    // Al ejecutarse desde la barra de acceso rápido, forzamos siempre su renderizado
+    localStorage.setItem("tw_snipe_open", "true");
 
-    // Prevenir duplicados
+    // Prevenir duplicados en la página actual
     const existingBox = document.getElementById("backtime-box");
     if (existingBox) existingBox.remove();
 
@@ -125,7 +108,6 @@
         line-height: 1.4;
         white-space: pre-wrap;
     }
-    /* Sección de accesos rápidos */
     #backtime-box .shortcuts-container {
         display: flex;
         justify-content: space-between;
@@ -159,7 +141,6 @@
         height: 16px;
         object-fit: contain;
     }
-    /* Estados de los resultados */
     #backtime-box .ok { border-left: 5px solid #4caf50; background: #e8f5e9; }
     #backtime-box .mid { border-left: 5px solid #ff9800; background: #fff3e0; }
     #backtime-box .bad { border-left: 5px solid #f44336; background: #ffebee; }
@@ -170,7 +151,7 @@
     const box = document.createElement("div");
     box.id = "backtime-box";
     
-    // Recuperar posición guardada o usar valores por defecto
+    // Recuperar posición guardada
     box.style.top = localStorage.getItem("tw_snipe_top") || "100px";
     box.style.left = localStorage.getItem("tw_snipe_left") || "20px";
 
@@ -193,7 +174,7 @@
         
         <div class="shortcuts-container">
             <a href="game.php?screen=map" class="shortcut-btn">
-                <img src="/graphic/links/map.png" onerror="this.src='https://dses.innogamescdn.com/asset/389fff4e/graphic/icons/map2.webp'" alt="Mapa">
+                <img src="/graphic/links/map.png" onerror="this.src='https://dsen.innogamescdn.com/asset/80998fde/graphic/links/map.png'" alt="Mapa">
                 <span>Mapa</span>
             </a>
             <a href="game.php?screen=place" class="shortcut-btn">
@@ -201,28 +182,36 @@
                 <span>Plaza de reuniones</span>
             </a>
         </div>
-
         <div style="margin-top:8px; font-size:10px; text-align:right; color:#8b6f47;">Hecho por samudev4</div>
     `;
     document.body.appendChild(box);
 
-    // Cargar textos guardados previamente de los inputs
+    // Cargar y guardar inputs en tiempo real
     const inputsFields = ['ataque_enemigo', 'duracion_viaje', 'hora_regreso'];
     inputsFields.forEach(id => {
         const field = document.getElementById(id);
         field.value = localStorage.getItem(`tw_snipe_${id}`) || "";
-        // Guardar automáticamente cuando el usuario escribe
         field.addEventListener("input", function() {
             localStorage.setItem(`tw_snipe_${id}`, field.value);
         });
     });
 
-    // Cerrar panel definitivamente
+    // RECONSTRUCCIÓN DEL ÚLTIMO RESULTADO GUARDADO
+    const resultado = document.getElementById("resultado");
+    const lastResultText = localStorage.getItem("tw_snipe_last_result_text");
+    const lastResultClass = localStorage.getItem("tw_snipe_last_result_class");
+    if (lastResultText && lastResultClass) {
+        resultado.className = lastResultClass;
+        resultado.innerText = lastResultText;
+    }
+
+    // Al cerrar desde la cruz, limpiamos los datos para la próxima sesión
     document.getElementById("close-backtime").addEventListener("click", function() {
         localStorage.setItem("tw_snipe_open", "false");
+        inputsFields.forEach(id => localStorage.removeItem(`tw_snipe_${id}`));
+        localStorage.removeItem("tw_snipe_last_result_text");
+        localStorage.removeItem("tw_snipe_last_result_class");
         box.remove();
-        // Recargamos para que aparezca el lanzador discreto si se desea volver a abrir
-        location.reload();
     });
 
     // Funciones de cálculo
@@ -230,12 +219,7 @@
         if(!str) return null;
         const parts = str.split(":").map(Number);
         if(parts.some(isNaN)) return null;
-        
-        const h = parts[0] || 0;
-        const m = parts[1] || 0;
-        const s = parts[2] || 0;
-        const ms = parts[3] || 0;
-        
+        const h = parts[0] || 0; const m = parts[1] || 0; const s = parts[2] || 0; const ms = parts[3] || 0;
         return (((h * 60 + m) * 60 + s) * 1000) + ms;
     }
 
@@ -246,13 +230,12 @@
         return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}:${String(mm).padStart(3,'0')}`;
     }
 
-    // Calcular tiempos con validación
+    // Calcular tiempos y guardar resultado en caché
     document.getElementById("calcular").addEventListener("click", function(){
         const ataqueEnemigo = parseTime(document.getElementById("ataque_enemigo").value);
         const duracionViaje = parseTime(document.getElementById("duracion_viaje").value);
         const regresoDeseado = parseTime(document.getElementById("hora_regreso").value);
 
-        const resultado = document.getElementById("resultado");
         resultado.className = "resultado-box";
 
         if (ataqueEnemigo === null || duracionViaje === null || regresoDeseado === null) {
@@ -271,14 +254,20 @@
         else if(margen >= 20) resultado.classList.add("mid");
         else resultado.classList.add("bad");
 
-        resultado.innerText = 
+        const textoResultado = 
             "✅ RESULTADOS:\n\n" +
             "👉 Enviar ataque para que llegue a las:\n   " + msToTime(llegadaHipotetica) + "\n\n" +
             "🛑 Cancelar exactamente a las:\n   " + msToTime(cancelar) + "\n\n" +
             "📊 Margen: " + margen + " ms (" + (margen/1000).toFixed(3) + " s)";
+
+        resultado.innerText = textoResultado;
+
+        // GUARDADO DE RESULTADOS EN CACHÉ
+        localStorage.setItem("tw_snipe_last_result_text", textoResultado);
+        localStorage.setItem("tw_snipe_last_result_class", resultado.className);
     });
 
-    // Hacer draggable y guardar posición final
+    // Draggable
     function makeDraggable(el, handle) {
         let isDragging = false, offsetX = 0, offsetY = 0;
         
@@ -300,7 +289,6 @@
             if (isDragging) {
                 isDragging = false;
                 document.body.style.userSelect = "auto";
-                // Guardar la posición en el almacenamiento para la próxima carga
                 localStorage.setItem("tw_snipe_top", el.style.top);
                 localStorage.setItem("tw_snipe_left", el.style.left);
             }
