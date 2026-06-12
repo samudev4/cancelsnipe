@@ -1,8 +1,8 @@
 /*
  * Script Name: Cancel Snipe
- * Version: v1.24
+ * Version: v1.26
  * Last Updated: 12/06/2026
- * Author: samudev (Mejoras de UI/UX e Iconos de Acceso Rápido)
+ * Author: samudev (Mejoras de UI/UX y Hora de Lanzamiento)
  * Author URL: https://github.com/samudev4
  * Author Contact: samudevelopment@gmail.com
  * Approved: NO
@@ -108,20 +108,19 @@
         white-space: pre-wrap; /* Respeta los saltos de línea */
     }
     
-    /* MEJORA 2: Clases específicas para agrandar títulos y horas calculadas */
     #backtime-box .res-title {
         font-size: 14px;
         font-weight: bold;
         text-transform: uppercase;
     }
 
-    /* NUEVA MEJORA: Estilo para los textos descriptivos de los resultados */
     #backtime-box .res-label {
-        font-size: 14px;
+        font-size: 13px;
+        font-weight: bold;
         display: inline-block;
         margin-bottom: 2px;
     }
-    
+
     #backtime-box .res-time {
         font-size: 15px;
         font-weight: bold;
@@ -131,14 +130,13 @@
         border-radius: 3px;
     }
 
-    /* NUEVA MEJORA: Estilo para el dato numérico del margen de seguridad */
     #backtime-box .res-margin-val {
-        font-size: 15px;
+        font-size: 14px;
         font-weight: bold;
         color: #000;
     }
 
-    /* MEJORA 1: Estilos para el contenedor de accesos rápidos */
+    /* Estilos para el contenedor de accesos rápidos */
     #backtime-box .shortcuts-container {
         display: flex;
         justify-content: center;
@@ -169,7 +167,7 @@
         object-fit: contain;
     }
 
-    /* Clases de estado mejoradas con fondos suaves */
+    /* Clases de estado */
     #backtime-box .ok { border-left: 5px solid #4caf50; background: #e8f5e9; }
     #backtime-box .mid { border-left: 5px solid #ff9800; background: #fff3e0; }
     #backtime-box .bad { border-left: 5px solid #f44336; background: #ffebee; }
@@ -198,14 +196,14 @@
         
         <div class="shortcuts-container">
             <a href="game.php?screen=map" class="shortcut-btn" title="Ir al Mapa">
-                <img src="/graphic/links/map.png" onerror="this.src='https://dses.innogamescdn.com/asset/389fff4e/graphic/icons/map2.webp'" alt="Mapa">
+                <img src="/graphic/links/map.png" onerror="this.src='https://dsen.innogamescdn.com/asset/80998fde/graphic/links/map.png'" alt="Mapa">
             </a>
             <a href="game.php?screen=place" class="shortcut-btn" title="Ir a la Plaza de Reuniones">
                 <img src="/graphic/buildings/place.png" onerror="this.src='https://dsen.innogamescdn.com/asset/80998fde/graphic/buildings/place.png'" alt="Plaza">
             </a>
         </div>
 
-        <div style="margin-top:8px; font-size:10px; text-align:right; color:#8b6f47;">Hecho por samudev4 | v1.23</div>
+        <div style="margin-top:8px; font-size:10px; text-align:right; color:#8b6f47;">Hecho por samudev4 | v1.26</div>
     `;
     document.body.appendChild(box);
 
@@ -261,12 +259,13 @@
         else if(margen >= 20) resultado.classList.add("mid");
         else resultado.classList.add("bad");
 
-        // MEJORA 2: Uso de innerHTML combinado con etiquetas span de tamaño aumentado y textos en negrita
+        // Cambios aquí: Añadido el campo explicativo de lanzamiento exacto basados en la variable 'envio'
         resultado.innerHTML = 
             `<span class="res-title">✅ RESULTADOS:</span>\n\n` +
             `<span class="res-label">👉 Enviar ataque para que llegue a las:</span>\n   <span class="res-time">${msToTime(llegadaHipotetica)}</span>\n\n` +
+            `<span class="res-label">🚀 Hora de lanzamiento (hacer clic en enviar):</span>\n   <span class="res-time">${msToTime(envio)}</span>\n\n` +
             `<span class="res-label">🛑 Cancelar exactamente a las:</span>\n   <span class="res-time">${msToTime(cancelar)}</span>\n\n` +
-            `<span class="res-label">📊 Margen:</span> <span class="res-margin-val">${margen} ms (${(margen/1000).toFixed(3)} s)</span>`;
+            `<span class="res-label">📊 Margen de seguridad:</span> <span class="res-margin-val">${margen} ms (${(margen/1000).toFixed(3)} s)</span>`;
     });
 
     // Hacer draggable
