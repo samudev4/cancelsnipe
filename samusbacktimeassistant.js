@@ -1,6 +1,6 @@
 /*
  * Script Name: Samu's Backtime Assistant
- * Version: v1.28
+ * Version: v1.29
  * Last Updated: 12/06/2026
  * Author: samudev
  * Author URL: https://github.com/samudev4
@@ -178,7 +178,7 @@
     box.id = "backtime-box";
     box.innerHTML = `
         <div class="header">
-            <h2>👑 SAMU'S BACKTIME ASSISTANT 👑</h2>
+            <h2>SAMU'S BACKTIME ASSISTANT</h2>
             <span id="close-backtime">✖</span>
         </div>
         <label>⚔️ 1. LLegada OFENSIVA SIN NOBLE (HH:MM:SS:MMM):</label>
@@ -202,7 +202,7 @@
             </a>
         </div>
 
-        <div style="margin-top:8px; font-size:10px; text-align:right; color:#8b6f47;">Hecho por samudev4 | v1.28</div>
+        <div style="margin-top:8px; font-size:10px; text-align:right; color:#8b6f47;">Hecho por samudev4 | v1.29</div>
     `;
     document.body.appendChild(box);
 
