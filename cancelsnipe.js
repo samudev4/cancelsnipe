@@ -1,8 +1,8 @@
 /*
- * Script Name: Cancel Snipe Optimizado
- * Version: v1.3
- * Last Updated: 09/06/2026
- * Author: samudev (Mejoras de UI/UX)
+ * Script Name: Cancel Snipe
+ * Version: v1.23
+ * Last Updated: 12/06/2026
+ * Author: samudev (Mejoras de UI/UX e Iconos de Acceso Rápido)
  * Author URL: https://github.com/samudev4
  * Author Contact: samudevelopment@gmail.com
  * Approved: NO
@@ -107,6 +107,53 @@
         line-height: 1.4;
         white-space: pre-wrap; /* Respeta los saltos de línea */
     }
+    
+    /* MEJORA 2: Clases específicas para agrandar títulos y horas calculadas */
+    #backtime-box .res-title {
+        font-size: 14px;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+    #backtime-box .res-time {
+        font-size: 15px;
+        font-weight: bold;
+        color: #000;
+        background: rgba(255, 255, 255, 0.4);
+        padding: 1px 4px;
+        border-radius: 3px;
+    }
+
+    /* MEJORA 1: Estilos para el contenedor de accesos rápidos */
+    #backtime-box .shortcuts-container {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        margin-top: 12px;
+        padding-top: 10px;
+        border-top: 1px dashed #8b6f47;
+    }
+    #backtime-box .shortcut-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 44px;
+        height: 44px;
+        background: #e6dfc9;
+        border: 1px solid #8b6f47;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background 0.2s, transform 0.1s;
+    }
+    #backtime-box .shortcut-btn:hover {
+        background: #d9c39c;
+        transform: scale(1.08);
+    }
+    #backtime-box .shortcut-btn img {
+        width: 26px;
+        height: 26px;
+        object-fit: contain;
+    }
+
     /* Clases de estado mejoradas con fondos suaves */
     #backtime-box .ok { border-left: 5px solid #4caf50; background: #e8f5e9; }
     #backtime-box .mid { border-left: 5px solid #ff9800; background: #fff3e0; }
@@ -119,7 +166,7 @@
     box.id = "backtime-box";
     box.innerHTML = `
         <div class="header">
-            <h2>🎯 CANCEL SNIPE</h2>
+            <h2>👑 CANCEL SNIPE 👑</h2>
             <span id="close-backtime">✖</span>
         </div>
         <label>⚔️ 1. LLegada OFENSIVA SIN NOBLE (HH:MM:SS:MMM):</label>
@@ -133,7 +180,17 @@
         
         <button id="calcular">Calcular Tiempos</button>
         <div id="resultado" class="resultado-box">Introduce los datos y pulsa calcular.</div>
-        <div style="margin-top:8px; font-size:10px; text-align:right; color:#8b6f47;">Hecho por samudev4</div>
+        
+        <div class="shortcuts-container">
+            <a href="game.php?screen=map" class="shortcut-btn" title="Ir al Mapa">
+                <img src="/graphic/links/map.png" onerror="this.src='https://dsen.innogamescdn.com/asset/80998fde/graphic/links/map.png'" alt="Mapa">
+            </a>
+            <a href="game.php?screen=place" class="shortcut-btn" title="Ir a la Plaza de Reuniones">
+                <img src="/graphic/buildings/place.png" onerror="this.src='https://dsen.innogamescdn.com/asset/80998fde/graphic/buildings/place.png'" alt="Plaza">
+            </a>
+        </div>
+
+        <div style="margin-top:8px; font-size:10px; text-align:right; color:#8b6f47;">Hecho por samudev4 | v1.23</div>
     `;
     document.body.appendChild(box);
 
@@ -142,7 +199,7 @@
         box.remove();
     });
 
-    // Funciones de cálculo (mejorada para aceptar formatos sin milisegundos)
+    // Funciones de cálculo
     function parseTime(str){
         if(!str) return null;
         const parts = str.split(":").map(Number);
@@ -151,7 +208,7 @@
         const h = parts[0] || 0;
         const m = parts[1] || 0;
         const s = parts[2] || 0;
-        const ms = parts[3] || 0; // Si no pone ms, asume 0
+        const ms = parts[3] || 0;
         
         return (((h * 60 + m) * 60 + s) * 1000) + ms;
     }
@@ -175,7 +232,7 @@
         // Validación de datos
         if (ataqueEnemigo === null || duracionViaje === null || regresoDeseado === null) {
             resultado.classList.add("error");
-            resultado.innerText = "⚠️ Error: Por favor, revisa que todos los campos tengan un formato de tiempo válido.";
+            resultado.innerHTML = "⚠️ Error: Por favor, revisa que todos los campos tengan un formato de tiempo válido.";
             return;
         }
 
@@ -189,14 +246,15 @@
         else if(margen >= 20) resultado.classList.add("mid");
         else resultado.classList.add("bad");
 
-        resultado.innerText = 
-            "✅ RESULTADOS:\n\n" +
-            "👉 Enviar ataque para que llegue a las:\n   " + msToTime(llegadaHipotetica) + "\n\n" +
-            "🛑 Cancelar exactamente a las:\n   " + msToTime(cancelar) + "\n\n" +
-            "📊 Margen de seguridad: " + margen + " ms (" + (margen/1000).toFixed(3) + " s)";
+        // MEJORA 2: Uso de innerHTML combinado con etiquetas span de tamaño aumentado y textos en negrita
+        resultado.innerHTML = 
+            `<span class="res-title">✅ RESULTADOS:</span>\n\n` +
+            `👉 Enviar ataque para que llegue a las:\n   <span class="res-time">${msToTime(llegadaHipotetica)}</span>\n\n` +
+            `🛑 Cancelar exactamente a las:\n   <span class="res-time">${msToTime(cancelar)}</span>\n\n` +
+            `📊 Margen de seguridad: <strong>${margen} ms</strong> (${(margen/1000).toFixed(3)} s)`;
     });
 
-    // Hacer draggable (usando addEventListener para no pisar otros scripts)
+    // Hacer draggable
     function makeDraggable(el, handle) {
         let isDragging = false, offsetX = 0, offsetY = 0;
         
