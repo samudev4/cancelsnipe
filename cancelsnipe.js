@@ -1,15 +1,15 @@
 /*
- * Script Name: Cancel Snipe
- * Version: v1.27
+ * Script Name: Samu's Backtime Assistant
+ * Version: v1.28
  * Last Updated: 12/06/2026
- * Author: samudev (Optimización de formato en Cancelación)
+ * Author: samudev
  * Author URL: https://github.com/samudev4
  * Author Contact: samudevelopment@gmail.com
  * Approved: NO
  */
 
 (function(){
-    // Prevenir duplicados: si ya existe, lo cierra antes de abrir uno nuevo
+    // Prevenir duplicados
     const existingBox = document.getElementById("backtime-box");
     if (existingBox) existingBox.remove();
 
@@ -105,7 +105,7 @@
         background: #e6dfc9;
         color: #2b1d0f;
         line-height: 1.4;
-        white-space: pre-wrap; /* Respeta los saltos de línea */
+        white-space: pre-wrap;
     }
     
     #backtime-box .res-title {
@@ -136,7 +136,6 @@
         color: #000;
     }
 
-    /* Estilos para el contenedor de accesos rápidos */
     #backtime-box .shortcuts-container {
         display: flex;
         justify-content: center;
@@ -179,7 +178,7 @@
     box.id = "backtime-box";
     box.innerHTML = `
         <div class="header">
-            <h2>👑 CANCEL SNIPE 👑</h2>
+            <h2>👑 SAMU'S BACKTIME ASSISTANT 👑</h2>
             <span id="close-backtime">✖</span>
         </div>
         <label>⚔️ 1. LLegada OFENSIVA SIN NOBLE (HH:MM:SS:MMM):</label>
@@ -196,14 +195,14 @@
         
         <div class="shortcuts-container">
             <a href="game.php?screen=map" class="shortcut-btn" title="Ir al Mapa">
-                <img src="/graphic/links/map.png" onerror="this.src='https://dsen.innogamescdn.com/asset/80998fde/graphic/links/map.png'" alt="Mapa">
+                <img src="/graphic/links/map.png" onerror="this.src='https://dses.innogamescdn.com/asset/389fff4e/graphic/icons/map2.webp'" alt="Mapa">
             </a>
             <a href="game.php?screen=place" class="shortcut-btn" title="Ir a la Plaza de Reuniones">
-                <img src="/graphic/buildings/place.png" onerror="this.src='https://dsen.innogamescdn.com/asset/80998fde/graphic/buildings/place.png'" alt="Plaza">
+                <img src="/graphic/buildings/place.png" onerror="this.src='https://dses.innogamescdn.com/asset/389fff4e/graphic/buildings/mid/place1.webp'" alt="Plaza">
             </a>
         </div>
 
-        <div style="margin-top:8px; font-size:10px; text-align:right; color:#8b6f47;">Hecho por samudev4 | v1.27</div>
+        <div style="margin-top:8px; font-size:10px; text-align:right; color:#8b6f47;">Hecho por samudev4 | v1.28</div>
     `;
     document.body.appendChild(box);
 
@@ -226,7 +225,7 @@
         return (((h * 60 + m) * 60 + s) * 1000) + ms;
     }
 
-    // MEJORA: Ahora acepta el parámetro booleano 'showMs' (por defecto true)
+    // Ahora acepta el parámetro booleano 'showMs' (por defecto true)
     function msToTime(ms, showMs = true){
         let h = Math.floor(ms / 3600000); ms %= 3600000;
         let m = Math.floor(ms / 60000); ms %= 60000;
@@ -266,9 +265,9 @@
         resultado.innerHTML = 
             `<span class="res-title">✅ RESULTADOS:</span>\n\n` +
             `<span class="res-label">👉 Enviar ataque para que llegue a las:</span>\n   <span class="res-time">${msToTime(llegadaHipotetica)}</span>\n\n` +
-            `<span class="res-label">🚀 Hora de lanzamiento (hacer clic en enviar):</span>\n   <span class="res-time">${msToTime(envio)}</span>\n\n` +
+            `<span class="res-label">🚀 Hora de lanzamiento:</span>\n   <span class="res-time">${msToTime(envio)}</span>\n\n` +
             `<span class="res-label">🛑 Cancelar exactamente a las:</span>\n   <span class="res-time">${msToTime(cancelar, false)}</span>\n\n` +
-            `<span class="res-label">📊 Margen de seguridad:</span> <span class="res-margin-val">${margen} ms (${(margen/1000).toFixed(3)} s)</span>`;
+            `<span class="res-label">📊 Margen:</span> <span class="res-margin-val">${margen} ms (${(margen/1000).toFixed(3)} s)</span>`;
     });
 
     // Hacer draggable
