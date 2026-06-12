@@ -122,13 +122,13 @@
             <h2>🎯 CANCEL SNIPE</h2>
             <span id="close-backtime">✖</span>
         </div>
-        <label>⚔️ 1. LLegada OFENSIVA (HH:MM:SS:MMM):</label>
+        <label>⚔️ 1. LLegada OFENSIVA SIN NOBLE(HH:MM:SS:MMM):</label>
         <input id="ataque_enemigo" type="text" placeholder="Ej: 16:14:51:492">
         
-        <label>⏱️ 2. Duración de tus tropas (HH:MM:SS:MMM):</label>
+        <label>⏱️ 2. Duración de tus tropas a un pueblo bárbaro (HH:MM:SS:MMM):</label>
         <input id="duracion_viaje" type="text" placeholder="Ej: 00:31:07:000">
         
-        <label>🔙 3. Hora de regreso (HH:MM:SS:MMM):</label>
+        <label>🔙 3. Hora de regreso entre OFENSIVA y NOBLE(HH:MM:SS:MMM):</label>
         <input id="hora_regreso" type="text" placeholder="Ej: 16:14:51:592">
         
         <button id="calcular">Calcular Tiempos</button>
