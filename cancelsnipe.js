@@ -1,6 +1,6 @@
 /*
  * Script Name: Cancel Snipe
- * Version: v1.23
+ * Version: v1.24
  * Last Updated: 12/06/2026
  * Author: samudev (Mejoras de UI/UX e Iconos de Acceso Rápido)
  * Author URL: https://github.com/samudev4
@@ -114,6 +114,15 @@
         font-weight: bold;
         text-transform: uppercase;
     }
+
+    /* NUEVA MEJORA: Estilo para los textos descriptivos de los resultados */
+    #backtime-box .res-label {
+        font-size: 13px;
+        font-weight: bold;
+        display: inline-block;
+        margin-bottom: 2px;
+    }
+    
     #backtime-box .res-time {
         font-size: 15px;
         font-weight: bold;
@@ -183,7 +192,7 @@
         
         <div class="shortcuts-container">
             <a href="game.php?screen=map" class="shortcut-btn" title="Ir al Mapa">
-                <img src="/graphic/links/map.png" onerror="this.src='https://dsen.innogamescdn.com/asset/80998fde/graphic/links/map.png'" alt="Mapa">
+                <img src="/graphic/links/map.png" onerror="this.src='https://dses.innogamescdn.com/asset/389fff4e/graphic/icons/map2.webp'" alt="Mapa">
             </a>
             <a href="game.php?screen=place" class="shortcut-btn" title="Ir a la Plaza de Reuniones">
                 <img src="/graphic/buildings/place.png" onerror="this.src='https://dsen.innogamescdn.com/asset/80998fde/graphic/buildings/place.png'" alt="Plaza">
@@ -249,9 +258,9 @@
         // MEJORA 2: Uso de innerHTML combinado con etiquetas span de tamaño aumentado y textos en negrita
         resultado.innerHTML = 
             `<span class="res-title">✅ RESULTADOS:</span>\n\n` +
-            `👉 Enviar ataque para que llegue a las:\n   <span class="res-time">${msToTime(llegadaHipotetica)}</span>\n\n` +
-            `🛑 Cancelar exactamente a las:\n   <span class="res-time">${msToTime(cancelar)}</span>\n\n` +
-            `📊 Margen de seguridad: <strong>${margen} ms</strong> (${(margen/1000).toFixed(3)} s)`;
+            `<span class="res-label">👉 Enviar ataque para que llegue a las:</span>\n   <span class="res-time">${msToTime(llegadaHipotetica)}</span>\n\n` +
+            `<span class="res-label">🛑 Cancelar exactamente a las:</span>\n   <span class="res-time">${msToTime(cancelar)}</span>\n\n` +
+            `<span class="res-label">📊 Margen de seguridad:</span> <strong>${margen} ms</strong> (${(margen/1000).toFixed(3)} s)`;
     });
 
     // Hacer draggable
