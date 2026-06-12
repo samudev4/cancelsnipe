@@ -1,8 +1,8 @@
 /*
  * Script Name: Cancel Snipe
- * Version: v1.26
+ * Version: v1.27
  * Last Updated: 12/06/2026
- * Author: samudev (Mejoras de UI/UX y Hora de Lanzamiento)
+ * Author: samudev (Optimización de formato en Cancelación)
  * Author URL: https://github.com/samudev4
  * Author Contact: samudevelopment@gmail.com
  * Approved: NO
@@ -203,7 +203,7 @@
             </a>
         </div>
 
-        <div style="margin-top:8px; font-size:10px; text-align:right; color:#8b6f47;">Hecho por samudev4 | v1.26</div>
+        <div style="margin-top:8px; font-size:10px; text-align:right; color:#8b6f47;">Hecho por samudev4 | v1.27</div>
     `;
     document.body.appendChild(box);
 
@@ -226,11 +226,14 @@
         return (((h * 60 + m) * 60 + s) * 1000) + ms;
     }
 
-    function msToTime(ms){
+    // MEJORA: Ahora acepta el parámetro booleano 'showMs' (por defecto true)
+    function msToTime(ms, showMs = true){
         let h = Math.floor(ms / 3600000); ms %= 3600000;
         let m = Math.floor(ms / 60000); ms %= 60000;
         let s = Math.floor(ms / 1000); let mm = ms % 1000;
-        return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}:${String(mm).padStart(3,'0')}`;
+        
+        const baseTime = `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+        return showMs ? `${baseTime}:${String(mm).padStart(3,'0')}` : baseTime;
     }
 
     // Calcular tiempos con validación
@@ -259,12 +262,12 @@
         else if(margen >= 20) resultado.classList.add("mid");
         else resultado.classList.add("bad");
 
-        // Cambios aquí: Añadido el campo explicativo de lanzamiento exacto basados en la variable 'envio'
+        // Cambios aquí: Se pasa 'false' a msToTime(cancelar) para omitir los milisegundos
         resultado.innerHTML = 
             `<span class="res-title">✅ RESULTADOS:</span>\n\n` +
             `<span class="res-label">👉 Enviar ataque para que llegue a las:</span>\n   <span class="res-time">${msToTime(llegadaHipotetica)}</span>\n\n` +
             `<span class="res-label">🚀 Hora de lanzamiento (hacer clic en enviar):</span>\n   <span class="res-time">${msToTime(envio)}</span>\n\n` +
-            `<span class="res-label">🛑 Cancelar exactamente a las:</span>\n   <span class="res-time">${msToTime(cancelar)}</span>\n\n` +
+            `<span class="res-label">🛑 Cancelar exactamente a las:</span>\n   <span class="res-time">${msToTime(cancelar, false)}</span>\n\n` +
             `<span class="res-label">📊 Margen de seguridad:</span> <span class="res-margin-val">${margen} ms (${(margen/1000).toFixed(3)} s)</span>`;
     });
 
