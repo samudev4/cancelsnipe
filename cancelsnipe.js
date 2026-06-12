@@ -193,7 +193,7 @@
         
         <div class="shortcuts-container">
             <a href="game.php?screen=map" class="shortcut-btn">
-                <img src="/graphic/links/map.png" onerror="this.src='https://dsen.innogamescdn.com/asset/80998fde/graphic/links/map.png'" alt="Mapa">
+                <img src="/graphic/links/map.png" onerror="this.src='https://dses.innogamescdn.com/asset/389fff4e/graphic/icons/map2.webp'" alt="Mapa">
                 <span>Ir al Mapa</span>
             </a>
             <a href="game.php?screen=place" class="shortcut-btn">
