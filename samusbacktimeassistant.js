@@ -1,6 +1,6 @@
 /*
  * Script Name: Samu's Backtime Assistant
- * Version: v1.29
+ * Version: v1.30
  * Last Updated: 12/06/2026
  * Author: samudev
  * Author URL: https://github.com/samudev4
@@ -202,7 +202,7 @@
             </a>
         </div>
 
-        <div style="margin-top:8px; font-size:10px; text-align:right; color:#8b6f47;">Hecho por samudev4 | v1.29</div>
+        <div style="margin-top:8px; font-size:10px; text-align:right; color:#8b6f47;">Hecho por samudev4 | v1.30</div>
     `;
     document.body.appendChild(box);
 
@@ -264,8 +264,8 @@
         // Cambios aquí: Se pasa 'false' a msToTime(cancelar) para omitir los milisegundos
         resultado.innerHTML = 
             `<span class="res-title">✅ RESULTADOS:</span>\n\n` +
-            `<span class="res-label">👉 Enviar ataque para que llegue a las:</span>\n   <span class="res-time">${msToTime(llegadaHipotetica)}</span>\n\n` +
             `<span class="res-label">🚀 Hora de lanzamiento:</span>\n   <span class="res-time">${msToTime(envio)}</span>\n\n` +
+            `<span class="res-label">👉 Enviar ataque para que llegue a las:</span>\n   <span class="res-time">${msToTime(llegadaHipotetica)}</span>\n\n` +
             `<span class="res-label">🛑 Cancelar exactamente a las:</span>\n   <span class="res-time">${msToTime(cancelar, false)}</span>\n\n` +
             `<span class="res-label">📊 Margen:</span> <span class="res-margin-val">${margen} ms (${(margen/1000).toFixed(3)} s)</span>`;
     });
