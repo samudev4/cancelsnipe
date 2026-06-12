@@ -1,14 +1,18 @@
 /*
- * Script Name: Cancel Snipe
- * Version: v1.2
+ * Script Name: Cancel Snipe Optimizado
+ * Version: v1.3
  * Last Updated: 09/06/2026
- * Author: samudev
+ * Author: samudev (Mejoras de UI/UX)
  * Author URL: https://github.com/samudev4
  * Author Contact: samudevelopment@gmail.com
  * Approved: NO
  */
 
 (function(){
+    // Prevenir duplicados: si ya existe, lo cierra antes de abrir uno nuevo
+    const existingBox = document.getElementById("backtime-box");
+    if (existingBox) existingBox.remove();
+
     const cancelDelay = 5000;
 
     const style = document.createElement("style");
@@ -17,72 +21,97 @@
         position: fixed;
         top: 100px;
         left: 20px;
-        width: 300px;
+        width: 320px;
         background: #f4f1e7;
         color: #2b1d0f;
-        padding: 10px;
-        border: 1px solid #8b6f47;
-        border-radius: 5px;
-        box-shadow: 0 0 8px rgba(0,0,0,0.3);
+        padding: 12px;
+        border: 2px solid #8b6f47;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.4);
         font-family: Verdana, Geneva, sans-serif;
         z-index: 99999;
         cursor: default;
     }
     #backtime-box .header {
         position: relative;
-        margin-bottom: 10px;
+        margin-bottom: 12px;
         cursor: move;
+        background: #8b6f47;
+        border-radius: 4px;
+        padding: 6px 0;
     }
     #backtime-box h2 {
         margin: 0;
         font-size: 14px;
         text-align: center;
-        background: #8b6f47;
         color: #fff;
-        padding: 4px 0;
-        border-radius: 3px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
     }
     #backtime-box #close-backtime {
         position: absolute;
-        top: 2px;
-        right: 4px;
+        top: 4px;
+        right: 8px;
         cursor: pointer;
         color: #fff;
         font-weight: bold;
-        font-size: 12px;
+        font-size: 14px;
+        transition: color 0.2s;
+    }
+    #backtime-box #close-backtime:hover {
+        color: #ffcccc;
+    }
+    #backtime-box label {
+        font-size: 11px;
+        font-weight: bold;
+        display: block;
+        margin-bottom: 4px;
     }
     #backtime-box input {
         width: 100%;
-        padding: 4px;
-        margin-bottom: 8px;
-        border: 1px solid #8b6f47;
-        border-radius: 3px;
-        font-size: 12px;
+        box-sizing: border-box;
+        padding: 6px;
+        margin-bottom: 12px;
+        border: 1px solid #c2b59b;
+        border-radius: 4px;
+        font-size: 13px;
+        background: #fff;
+    }
+    #backtime-box input:focus {
+        border-color: #8b6f47;
+        outline: none;
     }
     #backtime-box button {
         width: 100%;
-        padding: 6px;
+        padding: 8px;
         background: linear-gradient(#d9c39c, #b79868);
         border: 1px solid #8b6f47;
         color: #2b1d0f;
-        border-radius: 3px;
-        font-size: 12px;
+        border-radius: 4px;
+        font-size: 13px;
+        font-weight: bold;
         cursor: pointer;
+        text-transform: uppercase;
+        transition: background 0.2s;
     }
     #backtime-box button:hover {
-        background: linear-gradient(#b79868, #d9c39c);
+        background: linear-gradient(#c6b088, #a58656);
     }
     #backtime-box .resultado-box {
-        margin-top: 8px;
-        padding: 8px;
-        border-radius: 3px;
+        margin-top: 12px;
+        padding: 10px;
+        border-radius: 4px;
         font-size: 12px;
         background: #e6dfc9;
         color: #2b1d0f;
+        line-height: 1.4;
+        white-space: pre-wrap; /* Respeta los saltos de línea */
     }
-    #backtime-box .ok { border-left:4px solid #4caf50; }
-    #backtime-box .mid { border-left:4px solid #ffeb3b; }
-    #backtime-box .bad { border-left:4px solid #f44336; }
+    /* Clases de estado mejoradas con fondos suaves */
+    #backtime-box .ok { border-left: 5px solid #4caf50; background: #e8f5e9; }
+    #backtime-box .mid { border-left: 5px solid #ff9800; background: #fff3e0; }
+    #backtime-box .bad { border-left: 5px solid #f44336; background: #ffebee; }
+    #backtime-box .error { border-left: 5px solid #d32f2f; background: #ffebee; color: #d32f2f; font-weight: bold; }
     `;
     document.head.appendChild(style);
 
@@ -90,80 +119,107 @@
     box.id = "backtime-box";
     box.innerHTML = `
         <div class="header">
-            <h2>CANCEL SNIPE</h2>
+            <h2>🎯 CANCEL SNIPE</h2>
             <span id="close-backtime">✖</span>
         </div>
-        <label>1. Hora de llegada de la OFENSIVA enemiga (HH:MM:SS:MMM):</label>
-        <input id="ataque_enemigo" type="text" placeholder="16:14:51:492">
-        <label>2. Duración del ataque de tus tropas (HH:MM:SS:MMM):</label>
-        <input id="duracion_viaje" type="text" placeholder="00:31:07:000">
-        <label>3. Hora deseada de regreso (HH:MM:SS:MMM):</label>
-        <input id="hora_regreso" type="text" placeholder="16:14:51:592">
-        <button id="calcular">Calcular</button>
-        <div id="resultado" class="resultado-box">Introduce datos y pulsa Calcular.</div>
-        <div style="margin-top:4px; font-size:10px; text-align:right; color:#8b6f47;">Hecho por samudev4</div>
+        <label>⚔️ 1. LLegada OFENSIVA (HH:MM:SS:MMM):</label>
+        <input id="ataque_enemigo" type="text" placeholder="Ej: 16:14:51:492">
+        
+        <label>⏱️ 2. Duración de tus tropas (HH:MM:SS:MMM):</label>
+        <input id="duracion_viaje" type="text" placeholder="Ej: 00:31:07:000">
+        
+        <label>🔙 3. Hora de regreso (HH:MM:SS:MMM):</label>
+        <input id="hora_regreso" type="text" placeholder="Ej: 16:14:51:592">
+        
+        <button id="calcular">Calcular Tiempos</button>
+        <div id="resultado" class="resultado-box">Introduce los datos y pulsa calcular.</div>
+        <div style="margin-top:8px; font-size:10px; text-align:right; color:#8b6f47;">Hecho por samudev4</div>
     `;
     document.body.appendChild(box);
 
     // Cerrar panel
-    document.getElementById("close-backtime").onclick = function(){
+    document.getElementById("close-backtime").addEventListener("click", function() {
         box.remove();
-    };
+    });
 
-    // Funciones de cálculo
+    // Funciones de cálculo (mejorada para aceptar formatos sin milisegundos)
     function parseTime(str){
-        const [h,m,s,ms] = str.split(":").map(Number);
-        return (((h*60+m)*60+s)*1000) + ms;
+        if(!str) return null;
+        const parts = str.split(":").map(Number);
+        if(parts.some(isNaN)) return null;
+        
+        const h = parts[0] || 0;
+        const m = parts[1] || 0;
+        const s = parts[2] || 0;
+        const ms = parts[3] || 0; // Si no pone ms, asume 0
+        
+        return (((h * 60 + m) * 60 + s) * 1000) + ms;
     }
+
     function msToTime(ms){
-        let h = Math.floor(ms/3600000); ms%=3600000;
-        let m = Math.floor(ms/60000); ms%=60000;
-        let s = Math.floor(ms/1000); let mm = ms%1000;
+        let h = Math.floor(ms / 3600000); ms %= 3600000;
+        let m = Math.floor(ms / 60000); ms %= 60000;
+        let s = Math.floor(ms / 1000); let mm = ms % 1000;
         return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}:${String(mm).padStart(3,'0')}`;
     }
 
-    // Calcular tiempos
-    document.getElementById("calcular").onclick = function(){
+    // Calcular tiempos con validación
+    document.getElementById("calcular").addEventListener("click", function(){
         const ataqueEnemigo = parseTime(document.getElementById("ataque_enemigo").value);
         const duracionViaje = parseTime(document.getElementById("duracion_viaje").value);
         const regresoDeseado = parseTime(document.getElementById("hora_regreso").value);
 
-        const tiempoRegreso = cancelDelay*2;
+        const resultado = document.getElementById("resultado");
+        resultado.className = "resultado-box"; // Reset clases
+
+        // Validación de datos
+        if (ataqueEnemigo === null || duracionViaje === null || regresoDeseado === null) {
+            resultado.classList.add("error");
+            resultado.innerText = "⚠️ Error: Por favor, revisa que todos los campos tengan un formato de tiempo válido.";
+            return;
+        }
+
+        const tiempoRegreso = cancelDelay * 2;
         const envio = regresoDeseado - tiempoRegreso;
         const cancelar = envio + cancelDelay;
         const llegadaHipotetica = envio + duracionViaje;
         const margen = regresoDeseado - ataqueEnemigo;
 
-        const resultado = document.getElementById("resultado");
-        resultado.className = "resultado-box";
         if(margen > 80) resultado.classList.add("ok");
         else if(margen >= 20) resultado.classList.add("mid");
         else resultado.classList.add("bad");
 
-        resultado.innerText =
-            "Resultados\n\n"+
-            "Tu ataque debe llegar a las: "+msToTime(llegadaHipotetica)+"\n"+
-            "Debes cancelar el ataque a las: "+msToTime(cancelar)+"\n"+
-            "Regreso exacto: "+msToTime(regresoDeseado)+"\n"+
-            "MARGEN frente al ataque enemigo: "+margen+" ms ("+(margen/1000).toFixed(3)+" s)";
-    };
+        resultado.innerText = 
+            "✅ RESULTADOS:\n\n" +
+            "👉 Enviar ataque para que llegue a las:\n   " + msToTime(llegadaHipotetica) + "\n\n" +
+            "🛑 Cancelar exactamente a las:\n   " + msToTime(cancelar) + "\n\n" +
+            "📊 Margen: " + margen + " ms (" + (margen/1000).toFixed(3) + " s)";
+    });
 
-    // Hacer draggable
+    // Hacer draggable (usando addEventListener para no pisar otros scripts)
     function makeDraggable(el, handle) {
         let isDragging = false, offsetX = 0, offsetY = 0;
-        handle.onmousedown = function(e){
+        
+        handle.addEventListener("mousedown", function(e) {
             isDragging = true;
             offsetX = e.clientX - el.getBoundingClientRect().left;
             offsetY = e.clientY - el.getBoundingClientRect().top;
             document.body.style.userSelect = "none";
-        };
-        document.onmousemove = function(e){
-            if(!isDragging) return;
+        });
+
+        document.addEventListener("mousemove", function(e) {
+            if (!isDragging) return;
             el.style.left = (e.clientX - offsetX) + "px";
             el.style.top = (e.clientY - offsetY) + "px";
             el.style.right = "auto";
-        };
-        document.onmouseup = function(){ isDragging=false; document.body.style.userSelect="auto"; };
+        });
+
+        document.addEventListener("mouseup", function() {
+            if (isDragging) {
+                isDragging = false;
+                document.body.style.userSelect = "auto";
+            }
+        });
     }
     makeDraggable(box, box.querySelector(".header"));
 })();
