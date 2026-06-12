@@ -117,8 +117,7 @@
 
     /* NUEVA MEJORA: Estilo para los textos descriptivos de los resultados */
     #backtime-box .res-label {
-        font-size: 16px;
-        font-weight: bold;
+        font-size: 14px;
         display: inline-block;
         margin-bottom: 2px;
     }
@@ -134,7 +133,7 @@
 
     /* NUEVA MEJORA: Estilo para el dato numérico del margen de seguridad */
     #backtime-box .res-margin-val {
-        font-size: 14px;
+        font-size: 15px;
         font-weight: bold;
         color: #000;
     }
@@ -267,7 +266,7 @@
             `<span class="res-title">✅ RESULTADOS:</span>\n\n` +
             `<span class="res-label">👉 Enviar ataque para que llegue a las:</span>\n   <span class="res-time">${msToTime(llegadaHipotetica)}</span>\n\n` +
             `<span class="res-label">🛑 Cancelar exactamente a las:</span>\n   <span class="res-time">${msToTime(cancelar)}</span>\n\n` +
-            `<span class="res-label">📊 Margen de seguridad:</span> <span class="res-margin-val">${margen} ms (${(margen/1000).toFixed(3)} s)</span>`;
+            `<span class="res-label">📊 Margen:</span> <span class="res-margin-val">${margen} ms (${(margen/1000).toFixed(3)} s)</span>`;
     });
 
     // Hacer draggable
