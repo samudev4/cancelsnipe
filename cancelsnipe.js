@@ -1,18 +1,15 @@
 /*
- * Script Name: Cancel Snipe Avanzado (Quickbar)
- * Version: v1.6
- * Last Updated: 12/06/2026
- * Author: samudev (Optimizado para Quickbar sin Tampermonkey)
+ * Script Name: Cancel Snipe Optimizado
+ * Version: v1.3
+ * Last Updated: 09/06/2026
+ * Author: samudev (Mejoras de UI/UX)
  * Author URL: https://github.com/samudev4
  * Author Contact: samudevelopment@gmail.com
  * Approved: NO
  */
 
 (function(){
-    // Al ejecutarse desde la barra de acceso rápido, forzamos siempre su renderizado
-    localStorage.setItem("tw_snipe_open", "true");
-
-    // Prevenir duplicados en la página actual
+    // Prevenir duplicados: si ya existe, lo cierra antes de abrir uno nuevo
     const existingBox = document.getElementById("backtime-box");
     if (existingBox) existingBox.remove();
 
@@ -22,6 +19,8 @@
     style.textContent = `
     #backtime-box {
         position: fixed;
+        top: 100px;
+        left: 20px;
         width: 320px;
         background: #f4f1e7;
         color: #2b1d0f;
@@ -106,41 +105,9 @@
         background: #e6dfc9;
         color: #2b1d0f;
         line-height: 1.4;
-        white-space: pre-wrap;
+        white-space: pre-wrap; /* Respeta los saltos de línea */
     }
-    #backtime-box .shortcuts-container {
-        display: flex;
-        justify-content: space-between;
-        gap: 8px;
-        margin-top: 12px;
-        padding-top: 12px;
-        border-top: 1px dashed #8b6f47;
-    }
-    #backtime-box .shortcut-btn {
-        flex: 1;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 6px;
-        background: #e6dfc9;
-        border: 1px solid #8b6f47;
-        padding: 6px;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 11px;
-        text-decoration: none;
-        color: #2b1d0f;
-        font-weight: bold;
-        transition: background 0.2s;
-    }
-    #backtime-box .shortcut-btn:hover {
-        background: #d9c39c;
-    }
-    #backtime-box .shortcut-btn img {
-        width: 16px;
-        height: 16px;
-        object-fit: contain;
-    }
+    /* Clases de estado mejoradas con fondos suaves */
     #backtime-box .ok { border-left: 5px solid #4caf50; background: #e8f5e9; }
     #backtime-box .mid { border-left: 5px solid #ff9800; background: #fff3e0; }
     #backtime-box .bad { border-left: 5px solid #f44336; background: #ffebee; }
@@ -150,11 +117,6 @@
 
     const box = document.createElement("div");
     box.id = "backtime-box";
-    
-    // Recuperar posición guardada
-    box.style.top = localStorage.getItem("tw_snipe_top") || "100px";
-    box.style.left = localStorage.getItem("tw_snipe_left") || "20px";
-
     box.innerHTML = `
         <div class="header">
             <h2>🎯 CANCEL SNIPE</h2>
@@ -163,63 +125,34 @@
         <label>⚔️ 1. LLegada OFENSIVA SIN NOBLE (HH:MM:SS:MMM):</label>
         <input id="ataque_enemigo" type="text" placeholder="Ej: 16:14:51:492">
         
-        <label>⏱️ 2. Duración de tus tropas (HH:MM:SS:MMM):</label>
+        <label>⏱️ 2. Duración de tus tropas a pueblo bárbaro (HH:MM:SS:MMM):</label>
         <input id="duracion_viaje" type="text" placeholder="Ej: 00:31:07:000">
         
-        <label>🔙 3. Hora de regreso deseada (HH:MM:SS:MMM):</label>
+        <label>🔙 3. Hora de regreso entre OFENSIVA y NOBLE (HH:MM:SS:MMM):</label>
         <input id="hora_regreso" type="text" placeholder="Ej: 16:14:51:592">
         
         <button id="calcular">Calcular Tiempos</button>
         <div id="resultado" class="resultado-box">Introduce los datos y pulsa calcular.</div>
-        
-        <div class="shortcuts-container">
-            <a href="game.php?screen=map" class="shortcut-btn">
-                <img src="/graphic/links/map.png" onerror="this.src='https://dsen.innogamescdn.com/asset/80998fde/graphic/links/map.png'" alt="Mapa">
-                <span>Mapa</span>
-            </a>
-            <a href="game.php?screen=place" class="shortcut-btn">
-                <img src="/graphic/buildings/place.png" onerror="this.src='https://dsen.innogamescdn.com/asset/80998fde/graphic/buildings/place.png'" alt="Plaza">
-                <span>Plaza de reuniones</span>
-            </a>
-        </div>
         <div style="margin-top:8px; font-size:10px; text-align:right; color:#8b6f47;">Hecho por samudev4</div>
     `;
     document.body.appendChild(box);
 
-    // Cargar y guardar inputs en tiempo real
-    const inputsFields = ['ataque_enemigo', 'duracion_viaje', 'hora_regreso'];
-    inputsFields.forEach(id => {
-        const field = document.getElementById(id);
-        field.value = localStorage.getItem(`tw_snipe_${id}`) || "";
-        field.addEventListener("input", function() {
-            localStorage.setItem(`tw_snipe_${id}`, field.value);
-        });
-    });
-
-    // RECONSTRUCCIÓN DEL ÚLTIMO RESULTADO GUARDADO
-    const resultado = document.getElementById("resultado");
-    const lastResultText = localStorage.getItem("tw_snipe_last_result_text");
-    const lastResultClass = localStorage.getItem("tw_snipe_last_result_class");
-    if (lastResultText && lastResultClass) {
-        resultado.className = lastResultClass;
-        resultado.innerText = lastResultText;
-    }
-
-    // Al cerrar desde la cruz, limpiamos los datos para la próxima sesión
+    // Cerrar panel
     document.getElementById("close-backtime").addEventListener("click", function() {
-        localStorage.setItem("tw_snipe_open", "false");
-        inputsFields.forEach(id => localStorage.removeItem(`tw_snipe_${id}`));
-        localStorage.removeItem("tw_snipe_last_result_text");
-        localStorage.removeItem("tw_snipe_last_result_class");
         box.remove();
     });
 
-    // Funciones de cálculo
+    // Funciones de cálculo (mejorada para aceptar formatos sin milisegundos)
     function parseTime(str){
         if(!str) return null;
         const parts = str.split(":").map(Number);
         if(parts.some(isNaN)) return null;
-        const h = parts[0] || 0; const m = parts[1] || 0; const s = parts[2] || 0; const ms = parts[3] || 0;
+        
+        const h = parts[0] || 0;
+        const m = parts[1] || 0;
+        const s = parts[2] || 0;
+        const ms = parts[3] || 0; // Si no pone ms, asume 0
+        
         return (((h * 60 + m) * 60 + s) * 1000) + ms;
     }
 
@@ -230,14 +163,16 @@
         return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}:${String(mm).padStart(3,'0')}`;
     }
 
-    // Calcular tiempos y guardar resultado en caché
+    // Calcular tiempos con validación
     document.getElementById("calcular").addEventListener("click", function(){
         const ataqueEnemigo = parseTime(document.getElementById("ataque_enemigo").value);
         const duracionViaje = parseTime(document.getElementById("duracion_viaje").value);
         const regresoDeseado = parseTime(document.getElementById("hora_regreso").value);
 
-        resultado.className = "resultado-box";
+        const resultado = document.getElementById("resultado");
+        resultado.className = "resultado-box"; // Reset clases
 
+        // Validación de datos
         if (ataqueEnemigo === null || duracionViaje === null || regresoDeseado === null) {
             resultado.classList.add("error");
             resultado.innerText = "⚠️ Error: Por favor, revisa que todos los campos tengan un formato de tiempo válido.";
@@ -254,20 +189,14 @@
         else if(margen >= 20) resultado.classList.add("mid");
         else resultado.classList.add("bad");
 
-        const textoResultado = 
+        resultado.innerText = 
             "✅ RESULTADOS:\n\n" +
             "👉 Enviar ataque para que llegue a las:\n   " + msToTime(llegadaHipotetica) + "\n\n" +
             "🛑 Cancelar exactamente a las:\n   " + msToTime(cancelar) + "\n\n" +
-            "📊 Margen: " + margen + " ms (" + (margen/1000).toFixed(3) + " s)";
-
-        resultado.innerText = textoResultado;
-
-        // GUARDADO DE RESULTADOS EN CACHÉ
-        localStorage.setItem("tw_snipe_last_result_text", textoResultado);
-        localStorage.setItem("tw_snipe_last_result_class", resultado.className);
+            "📊 Margen de seguridad: " + margen + " ms (" + (margen/1000).toFixed(3) + " s)";
     });
 
-    // Draggable
+    // Hacer draggable (usando addEventListener para no pisar otros scripts)
     function makeDraggable(el, handle) {
         let isDragging = false, offsetX = 0, offsetY = 0;
         
@@ -289,8 +218,6 @@
             if (isDragging) {
                 isDragging = false;
                 document.body.style.userSelect = "auto";
-                localStorage.setItem("tw_snipe_top", el.style.top);
-                localStorage.setItem("tw_snipe_left", el.style.left);
             }
         });
     }
