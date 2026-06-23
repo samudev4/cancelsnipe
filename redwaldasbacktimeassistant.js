@@ -1,11 +1,10 @@
 /*
- * Script Name: Samu's Backtime Assistant
- * Version: v1.30
- * Last Updated: 12/06/2026
- * Author: samudev
+ * Script Name: REDWALDA'S BACKTIME ASSISTANT
+ * Version: v1.31
+ * Last Updated: 23/06/2026
+ * Author: REDWALDA
  * Author URL: https://github.com/samudev4
  * Author Contact: samudevelopment@gmail.com
- * Approved: NO
  */
 
 (function(){
@@ -178,7 +177,7 @@
     box.id = "backtime-box";
     box.innerHTML = `
         <div class="header">
-            <h2>SAMU'S BACKTIME ASSISTANT</h2>
+            <h2>REDWALDA'S BACKTIME ASSISTANT</h2>
             <span id="close-backtime">✖</span>
         </div>
         <label>⚔️ 1. LLegada OFENSIVA SIN NOBLE (HH:MM:SS:MMM):</label>
@@ -202,7 +201,7 @@
             </a>
         </div>
 
-        <div style="margin-top:8px; font-size:10px; text-align:right; color:#8b6f47;">Hecho por samudev4 | v1.30</div>
+        <div style="margin-top:8px; font-size:10px; text-align:right; color:#8b6f47;">Hecho por REDWALDA | v1.31</div>
     `;
     document.body.appendChild(box);
 
@@ -225,7 +224,7 @@
         return (((h * 60 + m) * 60 + s) * 1000) + ms;
     }
 
-    // Ahora acepta el parámetro booleano 'showMs' (por defecto true)
+    // Parámetro booleano 'showMs' (por defecto true)
     function msToTime(ms, showMs = true){
         let h = Math.floor(ms / 3600000); ms %= 3600000;
         let m = Math.floor(ms / 60000); ms %= 60000;
@@ -247,7 +246,7 @@
         // Validación de datos
         if (ataqueEnemigo === null || duracionViaje === null || regresoDeseado === null) {
             resultado.classList.add("error");
-            resultado.innerHTML = "⚠️ Error: Por favor, revisa que todos los campos tengan un formato de tiempo válido.";
+            resultado.innerHTML = "⚠️ Por favor, revisa que todos los campos tengan un formato de tiempo válido.";
             return;
         }
 
@@ -261,7 +260,7 @@
         else if(margen >= 20) resultado.classList.add("mid");
         else resultado.classList.add("bad");
 
-        // Cambios aquí: Se pasa 'false' a msToTime(cancelar) para omitir los milisegundos
+        // Se pasa 'false' a msToTime(cancelar) para omitir los milisegundos
         resultado.innerHTML = 
             `<span class="res-title">✅ RESULTADOS:</span>\n\n` +
             `<span class="res-label">🚀 Hora de lanzamiento:</span>\n   <span class="res-time">${msToTime(envio)}</span>\n\n` +
