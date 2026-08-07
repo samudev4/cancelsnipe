@@ -12,7 +12,7 @@
     const existingBox = document.getElementById("backtime-box");
     if (existingBox) existingBox.remove();
 
-    const cancelDelay = 5000;
+    const cancelDelay = 10000;
 
     const style = document.createElement("style");
     style.textContent = `
