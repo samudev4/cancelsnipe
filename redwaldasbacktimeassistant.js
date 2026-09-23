@@ -201,7 +201,7 @@
             </a>
         </div>
 
-        <div style="margin-top:8px; font-size:10px; text-align:right; color:#8b6f47;">Hecho por REDWALDA | v1.31</div>
+        <div style="margin-top:8px; font-size:10px; text-align:right; color:#8b6f47;">Hecho por REDWALDA | v1.32</div>
     `;
     document.body.appendChild(box);
 
